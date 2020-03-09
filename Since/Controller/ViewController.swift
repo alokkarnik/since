@@ -9,14 +9,16 @@
 import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var addButton: UIButton!
+
     var activityData: [Activity]? = nil
     var storageController = ActivityStorageController()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.backgroundColor = .clear
         tableView.dataSource = self
         tableView.delegate = self
@@ -25,17 +27,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         activityData = storageController.getAllActivities()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: addButton.bounds.height + 50))
+        addButton.layer.cornerRadius = addButton.bounds.size.width/2
+        addButton.clipsToBounds = true
+        addButton.titleLabel?.textAlignment = .center
     }
-
 }
 
 
 extension  ViewController {
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SinceCell") as! TableViewCell
         
@@ -52,7 +55,6 @@ extension  ViewController {
         guard let allActivities = activityData else {
             return 0
         }
-        
         return allActivities.count
     }
     

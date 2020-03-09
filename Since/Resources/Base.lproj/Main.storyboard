@@ -59,18 +59,36 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pFC-9O-QMn">
+                                <rect key="frame" x="314" y="762" width="60" height="60"/>
+                                <color key="backgroundColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="5kY-Xb-DOu"/>
+                                    <constraint firstAttribute="height" constant="60" id="bQe-58-GzF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="40"/>
+                                <state key="normal" title="+">
+                                    <color key="titleColor" red="0.42292778330000003" green="0.80149338250000002" blue="0.51775650439999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="add:" destination="BYZ-38-t0r" eventType="touchUpInside" id="R6E-Nw-lQ1"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.4311124086" green="0.74135535959999999" blue="0.38424539569999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.30184739830000001" green="0.75117248299999995" blue="0.3367453218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pFC-9O-QMn" secondAttribute="trailing" constant="40" id="3az-je-mTb"/>
                             <constraint firstItem="rXX-mO-OU1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AuJ-E2-bmD"/>
                             <constraint firstItem="rXX-mO-OU1" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="K13-z7-LVN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rXX-mO-OU1" secondAttribute="trailing" id="cfb-Af-35C"/>
                             <constraint firstAttribute="bottom" secondItem="rXX-mO-OU1" secondAttribute="bottom" id="wz6-8T-yf3"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pFC-9O-QMn" secondAttribute="bottom" constant="40" id="ydW-hX-Rng"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Since" id="PrX-2T-5bS"/>
                     <connections>
+                        <outlet property="addButton" destination="pFC-9O-QMn" id="4Mq-p4-QDs"/>
                         <outlet property="tableView" destination="rXX-mO-OU1" id="cAK-p8-O0Y"/>
                     </connections>
                 </viewController>

@@ -52,7 +52,7 @@ struct ActivityStorageController {
         let insertActivityString = """
             INSERT INTO Activities(name, daysSinceLastDone)
             values("\(activityTitle)", "0");
-        """
+            """
         storage.insert(insertString: insertActivityString)
 
     }
