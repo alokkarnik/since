@@ -69,7 +69,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         if let activity = activityData?[indexPath.row] {
             cell.activityLabel.text = activity.title
-            cell.sinceLabel.text = activity.pastOccurences.last?.toString()
+            cell.sinceLabel.text = String(activity.daysSinceLastOccurence) + " days"
         }
 
         return cell
