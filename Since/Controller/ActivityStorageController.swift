@@ -17,10 +17,10 @@ struct ActivityStorageController {
     
     fileprivate func initializeStorage() {
         let createTableString = """
-            CREATE TABLE IF NOT EXISTS Activities(
+            CREATE TABLE IF NOT EXISTS activities(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name text,
-            daysSinceLastDone integer);
+            occurrences text);
             """
         storage.createTable(createTableString: createTableString)
     }
@@ -29,7 +29,7 @@ struct ActivityStorageController {
         var activities: [Activity]? = nil
 
         let fetchAllActivitiesString = """
-            SELECT * FROM Activities ORDER BY id DESC;
+            SELECT * FROM activities ORDER BY id DESC;
             """
 
         if let storedActivites = storage.fetch(fetchString: fetchAllActivitiesString) {
@@ -37,23 +37,65 @@ struct ActivityStorageController {
             for storeActivity in storedActivites {
                 let activity = Activity(id: storeActivity["id"] as! Int,
                                         title:storeActivity["name"] as! String,
-                                        daysSinceLastDone: storeActivity["daysSinceLastDone"] as! Int)
-                if activities?.append(activity) == nil {
-                    activities = [activity]
+                                        pastOccurences: [Date()])
+                    if activities?.append(activity) == nil {
+                        activities = [activity]
+                    }
                 }
             }
-        }
-        
         return activities
     }
     
-    func insertActivity(activityTitle: String) {
+    func insertActivity(activityTitle: String, date: Date) {
         
-        let insertActivityString = """
-            INSERT INTO Activities(name, daysSinceLastDone)
-            values("\(activityTitle)", "0");
+        if let dateString = date.toString(), let jsonstr = json(from: [dateString]) {
+            let insertActivityStatement = """
+                INSERT INTO activities(name, occurrences)
+                values('\(activityTitle)',
+                '\(jsonstr)');
+                """
+            storage.insert(insertString: insertActivityStatement)
+        }
+    }
+    
+    func update(activity: Activity, date: Date) {
+        var updatedOccurences = activity.pastOccurences.map{$0.toString()}
+        updatedOccurences.append(date.toString())
+        if let jsonString = json(from: updatedOccurences as [Any]) {
+            let updateActivityStatement = """
+            UPDATE activities SET occurrences = '\(jsonString)' WHERE id = '\(activity.id)';
             """
-        storage.insert(insertString: insertActivityString)
+            storage.update(updateString: updateActivityStatement)
+        }
+    }
+}
 
+
+extension ActivityStorageController {
+    func json(from object:[Any]) -> String? {
+        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
+            return nil
+        }
+        return String(data: data, encoding: String.Encoding.utf8)
+    }
+}
+
+extension Date {
+    func toString() -> String? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        let stringDate: String = formatter.string(from: self)
+        
+        return stringDate
+    }
+}
+
+extension String {
+    func toDate(dateString: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let dateFromString: Date? = dateFormatter.date(from: self)
+        
+        return dateFromString
     }
 }

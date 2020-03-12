@@ -13,53 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
 
-    @IBOutlet weak var activityInputView: UIView!
-    
-    @IBOutlet weak var activityTitleTextField: UITextField!
-    @IBOutlet var tableViewBottomConstraint: NSLayoutConstraint!
-    
-    @IBOutlet weak var insertActivity: UIButton!
-    
     var activityData: [Activity]? = nil
     var storageController = ActivityStorageController()
 
-    @IBAction func add(_ sender: Any) {
-         showAddActivityView()
-     }
-
-     func showAddActivityView() {
-         addButton.isHidden = true
-         activityInputView.isHidden = false
-         tableViewBottomConstraint.isActive = false
-         activityTitleTextField.becomeFirstResponder()
-     }
-
-     func showDefaultView() {
-         addButton.isHidden = false
-         activityInputView.isHidden = true
-         tableViewBottomConstraint.isActive = true
-     }
-    
-     @IBAction func insertActivity(_ sender: Any) {
-         if let activityTitle = activityTitleTextField.text {
-             storageController.insertActivity(activityTitle: activityTitle)
-             
-             addButton.isHidden = false
-             activityInputView.isHidden = true
-             tableViewBottomConstraint.isActive = true
-             reloadData()
-             dismissKeyboard()
-         }
-     }
-
-    func reloadData() {
-        activityData = storageController.getAllActivities()
-        tableView.reloadData()
-    }
-}
-
-
-extension ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -67,17 +23,9 @@ extension ViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
-        tableView.allowsSelection = false
-        activityInputView.isHidden = true
 
         activityData = storageController.getAllActivities()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(screenTaped))
-        view.addGestureRecognizer(tap)
     }
 
     override func viewDidLayoutSubviews() {
@@ -87,28 +35,30 @@ extension ViewController {
         addButton.clipsToBounds = true
         addButton.titleLabel?.textAlignment = .center
     }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size.height {
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardSize
-            }
-        }
+    
+    func reloadData() {
+        activityData = storageController.getAllActivities()
+        tableView.reloadData()
     }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
+    
+    func showDatePickerAlertController(activity: Activity) {
+        let activityAlertController = UIAlertController(title: "Select date", message: nil, preferredStyle: .actionSheet)
+        
+        activityAlertController.addAction(UIAlertAction(title: "Today", style: .default, handler: { _ in
+            self.updateDateOccuredForAction(date: Date(), activity: activity)
+        }))
+        
+        activityAlertController.addAction(UIAlertAction(title: "Custom", style: .default, handler: { _ in
+            // Open calendar
+        }))
+        
+        activityAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(activityAlertController, animated: true, completion: nil)
     }
-
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-
-    @objc func screenTaped() {
-        dismissKeyboard()
-        showDefaultView()
+    
+    func updateDateOccuredForAction(date: Date, activity: Activity) {
+        storageController.update(activity: activity, date: date)
     }
 }
 
@@ -119,7 +69,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         if let activity = activityData?[indexPath.row] {
             cell.activityLabel.text = activity.title
-            cell.sinceLabel.text = String(activity.daysSinceLastDone) + " days"
+            cell.sinceLabel.text = activity.pastOccurences.last?.toString()
         }
 
         return cell
@@ -131,6 +81,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             return 0
         }
         return allActivities.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let activity = activityData?[indexPath.row] {
+            showDatePickerAlertController(activity: activity)
+        }
     }
 }
 

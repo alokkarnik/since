@@ -11,12 +11,12 @@ import Foundation
 struct Activity {
     let id: Int
     let title: String
-    var daysSinceLastDone: Int
-    
-    init(id:Int, title: String, daysSinceLastDone: Int) {
+    var pastOccurences: [Date]
+
+    init(id:Int, title: String, pastOccurences: [Date]) {
         self.id = id
         self.title = title
-        self.daysSinceLastDone = daysSinceLastDone
+        self.pastOccurences = pastOccurences
     }
     
 }

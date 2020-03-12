@@ -71,48 +71,9 @@
                                     <color key="titleColor" red="0.42292778330000003" green="0.80149338250000002" blue="0.51775650439999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <action selector="add:" destination="BYZ-38-t0r" eventType="touchUpInside" id="R6E-Nw-lQ1"/>
+                                    <segue destination="duI-st-9hd" kind="presentation" id="Okc-44-Erf"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cfg-SL-0oA">
-                                <rect key="frame" x="0.0" y="796" width="414" height="80"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D5U-B0-dgj">
-                                        <rect key="frame" x="16" y="30" width="42" height="50"/>
-                                        <state key="normal" title="Today">
-                                            <color key="titleColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                    </button>
-                                    <textField opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add activity e.g. had sugar" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AzT-eR-Exr">
-                                        <rect key="frame" x="16" y="8" width="390" height="22"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sre-03-ZIC">
-                                        <rect key="frame" x="368" y="30" width="30" height="50"/>
-                                        <state key="normal" title="👌🏻"/>
-                                        <connections>
-                                            <action selector="insertActivity:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FAy-gs-rja"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.30184739830000001" green="0.75117248299999995" blue="0.3367453218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="sre-03-ZIC" secondAttribute="bottom" id="25w-RS-dS9"/>
-                                    <constraint firstAttribute="trailing" secondItem="sre-03-ZIC" secondAttribute="trailing" constant="16" id="4Jy-Of-bCS"/>
-                                    <constraint firstItem="sre-03-ZIC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="D5U-B0-dgj" secondAttribute="trailing" constant="200" id="5rS-LW-WaE"/>
-                                    <constraint firstItem="D5U-B0-dgj" firstAttribute="top" secondItem="AzT-eR-Exr" secondAttribute="bottom" id="77e-1u-YLX"/>
-                                    <constraint firstItem="sre-03-ZIC" firstAttribute="top" secondItem="AzT-eR-Exr" secondAttribute="bottom" id="7jh-2r-aWI"/>
-                                    <constraint firstItem="D5U-B0-dgj" firstAttribute="leading" secondItem="cfg-SL-0oA" secondAttribute="leading" constant="16" id="Ans-7c-9kY"/>
-                                    <constraint firstItem="AzT-eR-Exr" firstAttribute="top" secondItem="cfg-SL-0oA" secondAttribute="top" constant="8" id="ClU-pI-NBE"/>
-                                    <constraint firstAttribute="bottom" secondItem="D5U-B0-dgj" secondAttribute="bottom" id="JrC-4X-ZuA"/>
-                                    <constraint firstAttribute="height" constant="80" id="fgW-W4-Tvc"/>
-                                    <constraint firstAttribute="trailing" secondItem="AzT-eR-Exr" secondAttribute="trailing" constant="8" id="nFo-nt-5F3"/>
-                                    <constraint firstItem="AzT-eR-Exr" firstAttribute="leading" secondItem="cfg-SL-0oA" secondAttribute="leading" constant="16" id="qha-ZE-cso"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.30184739830000001" green="0.75117248299999995" blue="0.3367453218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -120,28 +81,99 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pFC-9O-QMn" secondAttribute="bottom" constant="26" id="7ZY-ib-dFT"/>
                             <constraint firstItem="rXX-mO-OU1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AuJ-E2-bmD"/>
                             <constraint firstItem="rXX-mO-OU1" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="K13-z7-LVN"/>
-                            <constraint firstItem="cfg-SL-0oA" firstAttribute="top" secondItem="rXX-mO-OU1" secondAttribute="bottom" priority="999" id="KrW-uW-JtU"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cfg-SL-0oA" secondAttribute="trailing" id="T0E-hI-nr0"/>
-                            <constraint firstAttribute="bottom" secondItem="cfg-SL-0oA" secondAttribute="bottom" constant="20" symbolic="YES" id="ZOd-Zk-B6n"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rXX-mO-OU1" secondAttribute="trailing" id="cfb-Af-35C"/>
-                            <constraint firstItem="cfg-SL-0oA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="cnQ-V0-3Rq"/>
                             <constraint firstAttribute="bottom" secondItem="rXX-mO-OU1" secondAttribute="bottom" id="gMa-oI-rKb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Since" id="PrX-2T-5bS"/>
                     <connections>
-                        <outlet property="activityInputView" destination="cfg-SL-0oA" id="NMq-lF-dqr"/>
-                        <outlet property="activityTitleTextField" destination="AzT-eR-Exr" id="kLn-pR-9py"/>
                         <outlet property="addButton" destination="pFC-9O-QMn" id="4Mq-p4-QDs"/>
-                        <outlet property="insertActivity" destination="sre-03-ZIC" id="VQd-Db-uqk"/>
                         <outlet property="tableView" destination="rXX-mO-OU1" id="cAK-p8-O0Y"/>
-                        <outlet property="tableViewBottomConstraint" destination="gMa-oI-rKb" id="CnS-78-QPV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3778.2608695652175" y="137.94642857142856"/>
+        </scene>
+        <!--Add Activity View Controller-->
+        <scene sceneID="lob-fm-2yN">
+            <objects>
+                <viewController storyboardIdentifier="addActivityVC" id="duI-st-9hd" customClass="AddActivityViewController" customModule="Since" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ugV-2K-XZt">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bko-Xb-j63" userLabel="ActivityInputView">
+                                <rect key="frame" x="0.0" y="728" width="414" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NRR-hG-Zzg">
+                                        <rect key="frame" x="16" y="40" width="100" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="DJR-Ua-FBj"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="oZ9-bh-Tbd"/>
+                                        </constraints>
+                                        <state key="normal" title="Today">
+                                            <color key="titleColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="dateButtonTapped:" destination="duI-st-9hd" eventType="touchUpInside" id="a0S-pq-CtC"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add activity e.g. had sugar" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sfq-oK-lyQ">
+                                        <rect key="frame" x="16" y="8" width="382" height="24"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0E-zz-7sL">
+                                        <rect key="frame" x="354" y="40" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="B7l-5o-Dnd"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="btR-L6-oAy"/>
+                                            <constraint firstAttribute="height" constant="40" id="i5L-QW-du2"/>
+                                            <constraint firstAttribute="width" constant="40" id="rWx-ur-eEL"/>
+                                        </constraints>
+                                        <state key="normal" title="👌🏻"/>
+                                        <connections>
+                                            <action selector="addActivityButtonTapped:" destination="duI-st-9hd" eventType="touchUpInside" id="xKF-bE-WnK"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.30184739830000001" green="0.75117248299999995" blue="0.3367453218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="Sfq-oK-lyQ" firstAttribute="top" secondItem="bko-Xb-j63" secondAttribute="top" constant="8" id="2x2-pR-6PE"/>
+                                    <constraint firstAttribute="trailing" secondItem="d0E-zz-7sL" secondAttribute="trailing" constant="20" symbolic="YES" id="8ed-Fl-0y3"/>
+                                    <constraint firstItem="NRR-hG-Zzg" firstAttribute="top" secondItem="Sfq-oK-lyQ" secondAttribute="bottom" constant="8" id="CbW-Ba-oJE"/>
+                                    <constraint firstAttribute="trailing" secondItem="Sfq-oK-lyQ" secondAttribute="trailing" constant="16" id="bJZ-tc-iLY"/>
+                                    <constraint firstAttribute="bottom" secondItem="NRR-hG-Zzg" secondAttribute="bottom" id="hZZ-Vh-2LE"/>
+                                    <constraint firstItem="NRR-hG-Zzg" firstAttribute="leading" secondItem="bko-Xb-j63" secondAttribute="leading" constant="16" id="hzl-aW-dT8"/>
+                                    <constraint firstAttribute="height" constant="80" id="kCg-sw-tMc"/>
+                                    <constraint firstItem="Sfq-oK-lyQ" firstAttribute="leading" secondItem="bko-Xb-j63" secondAttribute="leading" constant="16" id="ovB-44-Jya"/>
+                                    <constraint firstAttribute="bottom" secondItem="d0E-zz-7sL" secondAttribute="bottom" id="wLF-6m-f5X"/>
+                                    <constraint firstItem="d0E-zz-7sL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="NRR-hG-Zzg" secondAttribute="trailing" constant="50" id="xPL-Rn-1jf"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="bko-Xb-j63" firstAttribute="leading" secondItem="vGv-9J-wYZ" secondAttribute="leading" id="Ym5-Nv-u3s"/>
+                            <constraint firstItem="bko-Xb-j63" firstAttribute="bottom" secondItem="vGv-9J-wYZ" secondAttribute="bottom" id="ZQl-ei-9F2"/>
+                            <constraint firstItem="bko-Xb-j63" firstAttribute="trailing" secondItem="vGv-9J-wYZ" secondAttribute="trailing" id="sFp-Eg-aaR"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="vGv-9J-wYZ"/>
+                    </view>
+                    <connections>
+                        <outlet property="addActivity" destination="d0E-zz-7sL" id="otU-s5-wQr"/>
+                        <outlet property="addActivityTextField" destination="Sfq-oK-lyQ" id="DLL-Np-GcR"/>
+                        <outlet property="dateButton" destination="NRR-hG-Zzg" id="TQQ-gQ-46N"/>
+                        <outlet property="updateDateButton" destination="NRR-hG-Zzg" id="dS1-rt-T9o"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lih-Xz-Mdf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4730" y="138"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Hr2-VG-pld">

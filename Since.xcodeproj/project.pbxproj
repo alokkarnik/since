@@ -15,6 +15,7 @@
 		5C0403F123BE5A0A0055271C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0403F023BE5A090055271C /* TableViewCell.swift */; };
 		5C22289F24164E2500E11671 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C22289E24164E2500E11671 /* Activity.swift */; };
 		5CA5028F24168A41001C4071 /* ActivityStorageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA5028E24168A41001C4071 /* ActivityStorageController.swift */; };
+		5CB9EF81241814D200734210 /* AddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9EF80241814D200734210 /* AddActivityViewController.swift */; };
 		5CE738F123EC675200B12515 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE738F023EC675200B12515 /* Storage.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		5C0403F023BE5A090055271C /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		5C22289E24164E2500E11671 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		5CA5028E24168A41001C4071 /* ActivityStorageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStorageController.swift; sourceTree = "<group>"; };
+		5CB9EF80241814D200734210 /* AddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityViewController.swift; sourceTree = "<group>"; };
 		5CE738F023EC675200B12515 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				5C0403F023BE5A090055271C /* TableViewCell.swift */,
+				5CB9EF80241814D200734210 /* AddActivityViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 				5C0403F123BE5A0A0055271C /* TableViewCell.swift in Sources */,
 				5CA5028F24168A41001C4071 /* ActivityStorageController.swift in Sources */,
 				5C0403E123BE546D0055271C /* ViewController.swift in Sources */,
+				5CB9EF81241814D200734210 /* AddActivityViewController.swift in Sources */,
 				5C0403DD23BE546D0055271C /* AppDelegate.swift in Sources */,
 				5CE738F123EC675200B12515 /* Storage.swift in Sources */,
 			);
