@@ -35,15 +35,19 @@ struct ActivityStorageController {
         if let storedActivites = storage.fetch(fetchString: fetchAllActivitiesString) {
             activities = [Activity]()
             for storeActivity in storedActivites {
-                let activity = Activity(id: storeActivity["id"] as! Int,
-                                        title:storeActivity["name"] as! String,
-                                        pastOccurences: [Date()])
-                    if activities?.append(activity) == nil {
-                        activities = [activity]
+                if let occurencesArr = arr(fromJson: storeActivity["occurrences"] as! String) as? [String] {
+                    let activity = Activity(id: storeActivity["id"] as! Int,
+                                                title:storeActivity["name"] as! String,
+                                                pastOccurences: occurencesArr.map{$0.toDate()!})
+
+                        if activities?.append(activity) == nil {
+                            activities = [activity]
                     }
                 }
             }
+        }
         return activities
+
     }
     
     func insertActivity(activityTitle: String, date: Date) {
@@ -78,6 +82,17 @@ extension ActivityStorageController {
         }
         return String(data: data, encoding: String.Encoding.utf8)
     }
+
+    func arr(fromJson:String) -> [Any]? {
+        if let jsonData = fromJson.data(using: .utf8) {
+            do {
+                    return try JSONSerialization.jsonObject(with: jsonData, options: []) as? [Any]
+                } catch {
+                    return nil
+                }
+            }
+        return nil
+    }
 }
 
 extension Date {
@@ -91,7 +106,7 @@ extension Date {
 }
 
 extension String {
-    func toDate(dateString: String) -> Date? {
+    func toDate() -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         let dateFromString: Date? = dateFormatter.date(from: self)

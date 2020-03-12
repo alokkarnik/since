@@ -16,7 +16,7 @@ struct Storage {
     init() {
         self.db = initStorage()
     }
-    
+
     private mutating func initStorage() -> OpaquePointer? {
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         .appendingPathComponent("activityStorage.sqlite")
@@ -28,25 +28,25 @@ struct Storage {
         }
         return db
     }
-    
+
     func createTable(createTableString: String) {
         queue.sync {
             _ = executeQuery(queryString: createTableString)
         }
     }
-    
+
     func insert(insertString:String) {
         queue.async {
             _ = self.executeQuery(queryString: insertString)
         }
     }
-    
+
     func update(updateString:String) {
        queue.async {
             _ = self.executeQuery(queryString: updateString)
         }
     }
-    
+
     func fetch(fetchString:String) -> [[String:Any]]? {
         var dataArray: [[String:Any]]? = nil
         queue.sync {
@@ -59,16 +59,16 @@ struct Storage {
                     for i in 0..<totalColumns {
                         let columnNameString = String.init(cString: sqlite3_column_name(fetchStatement, i))
                         let columnType = sqlite3_column_type(fetchStatement, i)
-                    
+
                         switch columnType {
                         case SQLITE_INTEGER:
                             let intValue = Int(sqlite3_column_int(fetchStatement, i))
                             row[columnNameString] = intValue
-                        
+
                         case SQLITE_TEXT:
                             let stringValue = String(cString: sqlite3_column_text(fetchStatement, i))
                             row[columnNameString] = stringValue
-                        
+
                         default:
                             break
                         }
@@ -79,10 +79,10 @@ struct Storage {
                 }
             }
         }
-        
+
         return dataArray
     }
-    
+
     fileprivate func executeQuery(queryString:String) -> Bool {
         var queryStatement: OpaquePointer?
         var success = false
@@ -92,7 +92,7 @@ struct Storage {
             }
         }
         sqlite3_finalize(queryStatement)
-        
+
         return success
     }
 }
