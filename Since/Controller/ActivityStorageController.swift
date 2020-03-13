@@ -40,17 +40,17 @@ struct ActivityStorageController {
             activities = [Activity]()
             for storeActivity in storedActivites {
                 if let occurencesArr = arr(fromJson: storeActivity["occurrences"] as! String) as? [String] {
-                    let activity = Activity(id: storeActivity["id"] as! Int,
+                    var activity = Activity(id: storeActivity["id"] as! Int,
                                                 title:storeActivity["name"] as! String,
                                                 pastOccurences: occurencesArr.map{$0.toDate()!})
-
+                    activity.pastOccurences = activity.pastOccurences.sorted(by: {$0.compare($1) == .orderedAscending })
                         if activities?.append(activity) == nil {
                             activities = [activity]
                     }
                 }
             }
         }
-        return activities
+        return activities?.sorted(by: {$0.daysSinceLastOccurence < $1.daysSinceLastOccurence})
 
     }
     
