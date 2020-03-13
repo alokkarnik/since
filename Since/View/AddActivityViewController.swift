@@ -45,7 +45,7 @@ class AddActivityViewController: UIViewController {
     }
     
     @IBAction func addActivityButtonTapped(_ sender: Any) {
-        if let title = addActivityTextField.text {
+        if let title = addActivityTextField.text, title.count > 0 {
             let date = dateButton.titleLabel?.text?.toDate() ?? Date()
             storageController.insertActivity(activityTitle: title, date: date)
             dismiss(animated: true, completion: nil)
