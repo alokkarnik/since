@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol ActivityDataProtocol {
+    
+}
+
 struct ActivityStorageController {
     var storage = Storage()
     
@@ -29,7 +33,7 @@ struct ActivityStorageController {
         var activities: [Activity]? = nil
 
         let fetchAllActivitiesString = """
-            SELECT * FROM activities ORDER BY id DESC;
+            SELECT * FROM activities;
             """
 
         if let storedActivites = storage.fetch(fetchString: fetchAllActivitiesString) {
@@ -50,18 +54,39 @@ struct ActivityStorageController {
 
     }
     
+    func getActivity(withID id:Int) -> Activity? {
+
+        var activity: Activity? = nil
+
+        let fetchActivitiesString = """
+        SELECT * FROM activities WHERE id = '\(id)';
+        """
+
+        if let storedActivites = storage.fetch(fetchString: fetchActivitiesString) {
+            for storeActivity in storedActivites {
+                if let occurencesArr = arr(fromJson: storeActivity["occurrences"] as! String) as? [String] {
+                    activity = Activity(id: storeActivity["id"] as! Int,
+                                                title:storeActivity["name"] as! String,
+                                                pastOccurences: occurencesArr.map{$0.toDate()!})
+
+                    }
+                }
+            }
+        return activity
+    }
+
     func insertActivity(activityTitle: String, date: Date) {
-        
         if let dateString = date.toString(), let jsonstr = json(from: [dateString]) {
             let insertActivityStatement = """
                 INSERT INTO activities(name, occurrences)
                 values('\(activityTitle)',
                 '\(jsonstr)');
                 """
-            storage.insert(insertString: insertActivityStatement)
+            storage.insert(insertString: insertActivityStatement, success: notify)
+            notify()
         }
     }
-    
+
     func update(activity: Activity, date: Date) {
         var updatedOccurences = activity.pastOccurences.map{$0.toString()}
         updatedOccurences.append(date.toString())
@@ -69,8 +94,13 @@ struct ActivityStorageController {
             let updateActivityStatement = """
             UPDATE activities SET occurrences = '\(jsonString)' WHERE id = '\(activity.id)';
             """
-            storage.update(updateString: updateActivityStatement)
+            storage.update(updateString: updateActivityStatement, success: notify)
         }
+    }
+
+    func notify() {
+        let nc = NotificationCenter.default
+        nc.post(name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
     }
 }
 

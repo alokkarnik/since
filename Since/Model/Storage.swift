@@ -35,15 +35,23 @@ struct Storage {
         }
     }
 
-    func insert(insertString:String) {
+    func insert(insertString:String, success: @escaping () -> Void) {
         queue.async {
-            _ = self.executeQuery(queryString: insertString)
+            if self.executeQuery(queryString: insertString) {
+                DispatchQueue.main.async {
+                    success()
+                }
+            }
         }
     }
 
-    func update(updateString:String) {
-       queue.async {
-            _ = self.executeQuery(queryString: updateString)
+    func update(updateString:String, success: @escaping () -> Void) {
+        queue.async {
+            if self.executeQuery(queryString: updateString) {
+                DispatchQueue.main.async {
+                    success()
+                }
+            }
         }
     }
 

@@ -25,6 +25,10 @@ class ViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
 
         activityData = storageController.getAllActivities()
+        let nc = NotificationCenter.default
+        nc.addObserver(self, selector: #selector(updateDateForActivity), name: NSNotification.Name(rawValue: "datePicked"), object: nil)
+
+        nc.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
         
     }
 
@@ -36,29 +40,54 @@ class ViewController: UIViewController {
         addButton.titleLabel?.textAlignment = .center
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super .viewDidAppear(animated)
+        refresh()
+    }
+
     func reloadData() {
         activityData = storageController.getAllActivities()
         tableView.reloadData()
     }
-    
+
     func showDatePickerAlertController(activity: Activity) {
         let activityAlertController = UIAlertController(title: "Select date", message: nil, preferredStyle: .actionSheet)
-        
+
         activityAlertController.addAction(UIAlertAction(title: "Today", style: .default, handler: { _ in
             self.updateDateOccuredForAction(date: Date(), activity: activity)
         }))
-        
+
         activityAlertController.addAction(UIAlertAction(title: "Custom", style: .default, handler: { _ in
-            // Open calendar
+            self.showDatePicker(forActivity: activity)
         }))
-        
+
         activityAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         present(activityAlertController, animated: true, completion: nil)
     }
-    
+
+    @objc func updateDateForActivity(notification:NSNotification) {
+        let userInfo:Dictionary<String,String> = notification.userInfo as! Dictionary<String,String>
+        if let id = userInfo["id"], let date = userInfo["date"]?.toDate() {
+            if let activity = storageController.getActivity(withID: Int(id)!) {
+                self.updateDateOccuredForAction(date: date, activity: activity)
+            }
+        }
+    }
+
     func updateDateOccuredForAction(date: Date, activity: Activity) {
         storageController.update(activity: activity, date: date)
+    }
+    
+    func showDatePicker(forActivity:Activity) {
+        let datePickerVC = storyboard?.instantiateViewController(identifier: "DatePickerVC") as! DatePickerViewController
+        datePickerVC.activity = forActivity
+        present(datePickerVC, animated: true, completion: nil)
+    }
+    
+    @objc func refresh() {
+        activityData = storageController.getAllActivities()
+        tableView.reloadData()
     }
 }
 

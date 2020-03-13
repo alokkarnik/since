@@ -24,11 +24,10 @@ struct Activity {
             if let lastOccuredDate = pastOccurences.last {
                 let calendar = Calendar.current
 
-                // Replace the hour (time) of both dates with 00:00
                 let today = calendar.startOfDay(for: Date())
                 let date = calendar.startOfDay(for: lastOccuredDate)
 
-                let components = calendar.dateComponents([.day], from: today, to: date)
+                let components = calendar.dateComponents([.day], from: date, to: today)
                 return components.day ?? 0
             }
             return 0

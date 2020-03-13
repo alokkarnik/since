@@ -20,12 +20,14 @@ class AddActivityViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         modalPresentationStyle = .fullScreen
-        
+        addActivityTextField.becomeFirstResponder()
+        addActivityTextField.autocorrectionType = .no
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
          NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        addActivityTextField.becomeFirstResponder()
+        NotificationCenter.default.addObserver(self, selector: #selector(datePicked), name: NSNotification.Name(rawValue: "datePicked"), object: nil)
+        
         view.backgroundColor = .clear
         
         let screenTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(screenTaped))
@@ -37,15 +39,29 @@ class AddActivityViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        dismissKeyboard()
+    }
+    
     @IBAction func addActivityButtonTapped(_ sender: Any) {
         if let title = addActivityTextField.text {
-            storageController.insertActivity(activityTitle: title, date: Date())
+            let date = dateButton.titleLabel?.text?.toDate() ?? Date()
+            storageController.insertActivity(activityTitle: title, date: date)
             dismiss(animated: true, completion: nil)
         }
     }
     
     @IBAction func dateButtonTapped(_ sender: Any) {
-        
+        let datePickerVC = storyboard?.instantiateViewController(identifier: "DatePickerVC") as! DatePickerViewController
+        present(datePickerVC, animated: true, completion: nil)
+    }
+    
+    @objc func datePicked(notification:NSNotification) {
+        let userInfo:Dictionary<String,String> = notification.userInfo as! Dictionary<String,String>
+        if let date = userInfo["date"]?.toDate() {
+            dateButton.setTitle(date.toString(), for: .normal)
+        }
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -69,5 +85,4 @@ class AddActivityViewController: UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
-
 }
