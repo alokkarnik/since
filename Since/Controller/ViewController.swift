@@ -89,6 +89,7 @@ class ViewController: UIViewController {
         activityData = storageController.getAllActivities()
         tableView.reloadData()
     }
+    
 }
 
 
@@ -116,6 +117,27 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         if let activity = activityData?[indexPath.row] {
             showDatePickerAlertController(activity: activity)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete), let activity = activityData?[indexPath.row] {
+            let alert = UIAlertController(title: "Delete activity", message: "This action cannot be reversed", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Ok", style: .default) { (action) in
+                self.delete(uiAlertAction: action, activity: activity)
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func delete (uiAlertAction: UIAlertAction ,activity: Activity) {
+        storageController.delete(activity: activity)
     }
 }
 

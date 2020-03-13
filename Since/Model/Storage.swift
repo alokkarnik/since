@@ -54,6 +54,16 @@ struct Storage {
             }
         }
     }
+    
+    func delete(deleteString:String, success: @escaping () -> Void) {
+        queue.async {
+            if self.executeQuery(queryString: deleteString) {
+                DispatchQueue.main.async {
+                    success()
+                }
+            }
+        }
+    }
 
     func fetch(fetchString:String) -> [[String:Any]]? {
         var dataArray: [[String:Any]]? = nil

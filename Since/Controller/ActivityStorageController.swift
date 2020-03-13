@@ -97,6 +97,14 @@ struct ActivityStorageController {
             storage.update(updateString: updateActivityStatement, success: notify)
         }
     }
+    
+    func delete(activity: Activity) {
+        let deleteActivityStatement = """
+            DELETE FROM activities where id = '\(activity.id)';
+        """
+        
+        storage.delete(deleteString: deleteActivityStatement, success: notify)
+    }
 
     func notify() {
         let nc = NotificationCenter.default
