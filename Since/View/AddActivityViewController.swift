@@ -53,7 +53,7 @@ class AddActivityViewController: UIViewController {
     }
     
     @IBAction func dateButtonTapped(_ sender: Any) {
-        let datePickerVC = storyboard?.instantiateViewController(identifier: "DatePickerVC") as! DatePickerViewController
+        let datePickerVC = storyboard?.instantiateViewController(withIdentifier: "DatePickerVC") as! DatePickerViewController
         present(datePickerVC, animated: true, completion: nil)
     }
     

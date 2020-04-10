@@ -22,7 +22,6 @@ class ViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 0, right: 0)
 
         activityData = storageController.getAllActivities()
         let nc = NotificationCenter.default
@@ -80,7 +79,7 @@ class ViewController: UIViewController {
     }
     
     func showDatePicker(forActivity:Activity) {
-        let datePickerVC = storyboard?.instantiateViewController(identifier: "DatePickerVC") as! DatePickerViewController
+        let datePickerVC = storyboard?.instantiateViewController(withIdentifier: "DatePickerVC") as! DatePickerViewController
         datePickerVC.activity = forActivity
         present(datePickerVC, animated: true, completion: nil)
     }
