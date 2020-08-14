@@ -8,20 +8,25 @@
 
 import Foundation
 import SQLite3
+let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
-struct Storage {
+public struct Storage {
     fileprivate var db: OpaquePointer?
-    private let queue = DispatchQueue(label: "DBSerialiser")
+    fileprivate let databaseName: String
 
-    init() {
-        self.db = initStorage()
+    private let queue = DispatchQueue(label: "sqlHelperQueue",
+                                      qos: .utility,
+                                      attributes: .concurrent)
+
+    public init(databaseName: String) {
+        self.databaseName = databaseName
+        db = initStorage()
     }
 
     private mutating func initStorage() -> OpaquePointer? {
-        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        .appendingPathComponent("activityStorage.sqlite")
-        
-        //Open database
+        let fileURL = getStoragePath()
+
+        // Open database
         if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
             print("Error opening database")
             return nil
@@ -29,53 +34,92 @@ struct Storage {
         return db
     }
 
-    func createTable(createTableString: String) {
-        queue.sync {
-            _ = executeQuery(queryString: createTableString)
+    public func createTable(createTableString: String) -> Bool {
+        return queue.sync(flags: .barrier) {
+            executeQuery(queryString: createTableString)
         }
     }
 
-    func insert(insertString:String, success: @escaping () -> Void) {
-        queue.async {
-            if self.executeQuery(queryString: insertString) {
-                DispatchQueue.main.async {
-                    success()
+    @discardableResult public func insert(insertString: String, parameters: [Any?]) -> Bool {
+        var queryStatement: OpaquePointer?
+        var success = false
+        if sqlite3_prepare_v2(db, insertString, -1, &queryStatement, nil) == SQLITE_OK {
+            for (index, value) in parameters.enumerated() {
+                if let value = value as? Int {
+                    sqlite3_bind_int(queryStatement, Int32(index + 1), Int32(value))
+                } else if let value = value as? String {
+                    sqlite3_bind_text(queryStatement, Int32(index + 1), String(utf8String: value), -1, SQLITE_TRANSIENT)
+                } else if let value = value as? [Any] {
+                    if let jsonStr = jsonString(from: value) {
+                        sqlite3_bind_text(queryStatement, Int32(index + 1), String(utf8String: jsonStr), -1, SQLITE_TRANSIENT)
+                    }
+                } else if let value = value as? Double {
+                    sqlite3_bind_double(queryStatement, Int32(index + 1), value)
+                } else if let value = value as? Bool {
+                    let intVal = value ? 1 : 0
+                    sqlite3_bind_int(queryStatement, Int32(index + 1), Int32(intVal))
+                } else {
+                    sqlite3_bind_null(queryStatement, Int32(index + 1))
                 }
             }
+
+            if sqlite3_step(queryStatement) == SQLITE_DONE {
+                success = true
+            }
+        }
+        sqlite3_finalize(queryStatement)
+        return success
+    }
+
+    public func update(updateString: String, parameters: [Any?]) -> Bool {
+        
+        var queryStatement: OpaquePointer?
+        var success = false
+        if sqlite3_prepare_v2(db, updateString, -1, &queryStatement, nil) == SQLITE_OK {
+            for (index, value) in parameters.enumerated() {
+                if let value = value as? Int {
+                    sqlite3_bind_int(queryStatement, Int32(index + 1), Int32(value))
+                } else if let value = value as? String {
+                    sqlite3_bind_text(queryStatement, Int32(index + 1), String(utf8String: value), -1, SQLITE_TRANSIENT)
+                } else if let value = value as? [Any] {
+                    if let jsonStr = jsonString(from: value) {
+                        sqlite3_bind_text(queryStatement, Int32(index + 1), String(utf8String: jsonStr), -1, SQLITE_TRANSIENT)
+                    }
+                } else if let value = value as? Double {
+                    sqlite3_bind_double(queryStatement, Int32(index + 1), value)
+                } else if let value = value as? Bool {
+                    let intVal = value ? 1 : 0
+                    sqlite3_bind_int(queryStatement, Int32(index + 1), Int32(intVal))
+                } else {
+                    sqlite3_bind_null(queryStatement, Int32(index + 1))
+                }
+            }
+
+            if sqlite3_step(queryStatement) == SQLITE_DONE {
+                success = true
+            }
+        }
+        sqlite3_finalize(queryStatement)
+        return success
+    }
+
+    public func delete(deleteString: String) {
+        return queue.sync(flags: .barrier) {
+            executeQuery(queryString: deleteString)
         }
     }
 
-    func update(updateString:String, success: @escaping () -> Void) {
-        queue.async {
-            if self.executeQuery(queryString: updateString) {
-                DispatchQueue.main.async {
-                    success()
-                }
-            }
-        }
-    }
-    
-    func delete(deleteString:String, success: @escaping () -> Void) {
-        queue.async {
-            if self.executeQuery(queryString: deleteString) {
-                DispatchQueue.main.async {
-                    success()
-                }
-            }
-        }
-    }
-
-    func fetch(fetchString:String) -> [[String:Any]]? {
-        var dataArray: [[String:Any]]? = nil
+    public func fetch(fetchString: String) -> [[String: Any]]? {
+        var dataArray: [[String: Any]]?
         queue.sync {
             var fetchStatement: OpaquePointer?
             if sqlite3_prepare(db, fetchString, -1, &fetchStatement, nil) == SQLITE_OK {
                 while sqlite3_step(fetchStatement) == SQLITE_ROW {
                     let totalColumns = sqlite3_column_count(fetchStatement)
-                    var row = [String:Any]()
-                
-                    for i in 0..<totalColumns {
-                        let columnNameString = String.init(cString: sqlite3_column_name(fetchStatement, i))
+                    var row = [String: Any]()
+
+                    for i in 0 ..< totalColumns {
+                        let columnNameString = String(cString: sqlite3_column_name(fetchStatement, i))
                         let columnType = sqlite3_column_type(fetchStatement, i)
 
                         switch columnType {
@@ -87,6 +131,12 @@ struct Storage {
                             let stringValue = String(cString: sqlite3_column_text(fetchStatement, i))
                             row[columnNameString] = stringValue
 
+                        case SQLITE_FLOAT:
+                            let realValue = Double(sqlite3_column_int(fetchStatement, i))
+                            row[columnNameString] = realValue
+
+                        case SQLITE_NULL:
+                            row[columnNameString] = nil
                         default:
                             break
                         }
@@ -101,7 +151,11 @@ struct Storage {
         return dataArray
     }
 
-    fileprivate func executeQuery(queryString:String) -> Bool {
+    public func destroyStorage() {
+        try? FileManager.default.removeItem(atPath: getStoragePath().path)
+    }
+
+    @discardableResult fileprivate func executeQuery(queryString: String) -> Bool {
         var queryStatement: OpaquePointer?
         var success = false
         if sqlite3_prepare_v2(db, queryString, -1, &queryStatement, nil) == SQLITE_OK {
@@ -113,5 +167,19 @@ struct Storage {
 
         return success
     }
-}
 
+    fileprivate func getStoragePath() -> URL {
+        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            .appendingPathComponent("\(databaseName).sqlite")
+
+        return fileURL
+    }
+
+    fileprivate func jsonString(from object: Any) -> String? {
+        guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
+            print(object)
+            return nil
+        }
+        return String(data: data, encoding: String.Encoding.utf8)
+    }
+}

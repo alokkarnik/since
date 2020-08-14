@@ -13,7 +13,7 @@ protocol ActivityDataProtocol {
 }
 
 struct ActivityStorageController {
-    var storage = Storage()
+    var storage = Storage(databaseName: "activityStorage.sqlite")
     
     init() {
         initializeStorage()
@@ -79,10 +79,9 @@ struct ActivityStorageController {
         if let dateString = date.toString(), let jsonstr = json(from: [dateString]) {
             let insertActivityStatement = """
                 INSERT INTO activities(name, occurrences)
-                values('\(activityTitle)',
-                '\(jsonstr)');
+                values(?,?);
                 """
-            storage.insert(insertString: insertActivityStatement, success: notify)
+            storage.insert(insertString: insertActivityStatement, parameters: [activityTitle, jsonstr])
             notify()
         }
     }
@@ -92,9 +91,10 @@ struct ActivityStorageController {
         updatedOccurences.append(date.toString())
         if let jsonString = json(from: updatedOccurences as [Any]) {
             let updateActivityStatement = """
-            UPDATE activities SET occurrences = '\(jsonString)' WHERE id = '\(activity.id)';
+            UPDATE activities SET occurrences = ? WHERE id = ?;
             """
-            storage.update(updateString: updateActivityStatement, success: notify)
+            _ = storage.update(updateString: updateActivityStatement, parameters: [jsonString, activity.id])
+            notify()
         }
     }
     
@@ -103,7 +103,8 @@ struct ActivityStorageController {
             DELETE FROM activities where id = '\(activity.id)';
         """
         
-        storage.delete(deleteString: deleteActivityStatement, success: notify)
+        storage.delete(deleteString: deleteActivityStatement)
+        notify()
     }
 
     func notify() {
