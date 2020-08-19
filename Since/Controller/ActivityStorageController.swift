@@ -8,55 +8,51 @@
 
 import Foundation
 
-protocol ActivityDataProtocol {
-    
-}
+protocol ActivityDataProtocol {}
 
 struct ActivityStorageController {
     var storage = Storage(databaseName: "activityStorage")
-    
+
     init() {
         initializeStorage()
     }
-    
+
     fileprivate func initializeStorage() {
         let createTableString = """
-            CREATE TABLE IF NOT EXISTS activities(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name text,
-            occurrences text);
-            """
+        CREATE TABLE IF NOT EXISTS activities(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name text,
+        occurrences text);
+        """
         _ = storage.createTable(createTableString: createTableString)
     }
-    
+
     func getAllActivities() -> [Activity]? {
-        var activities: [Activity]? = nil
+        var activities: [Activity]?
 
         let fetchAllActivitiesString = """
-            SELECT * FROM activities;
-            """
+        SELECT * FROM activities;
+        """
 
         if let storedActivites = storage.fetch(fetchString: fetchAllActivitiesString) {
             activities = [Activity]()
             for storeActivity in storedActivites {
                 if let occurencesArr = arr(fromJson: storeActivity["occurrences"] as! String) as? [String] {
                     var activity = Activity(id: storeActivity["id"] as! Int,
-                                                title:storeActivity["name"] as! String,
-                                                pastOccurences: occurencesArr.map{$0.toDate()!})
-                    activity.pastOccurences = activity.pastOccurences.sorted(by: {$0.compare($1) == .orderedAscending })
-                        if activities?.append(activity) == nil {
-                            activities = [activity]
+                                            title: storeActivity["name"] as! String,
+                                            pastOccurences: occurencesArr.map { $0.toDate()! })
+                    activity.pastOccurences = activity.pastOccurences.sorted(by: { $0.compare($1) == .orderedAscending })
+                    if activities?.append(activity) == nil {
+                        activities = [activity]
                     }
                 }
             }
         }
-        return activities?.sorted(by: {$0.daysSinceLastOccurence < $1.daysSinceLastOccurence})
-
+        return activities?.sorted(by: { $0.daysSinceLastOccurence < $1.daysSinceLastOccurence })
     }
-    
-    func getActivity(withID id:Int) -> Activity? {
 
-        var activity: Activity? = nil
+    func getActivity(withID id: Int) -> Activity? {
+        var activity: Activity?
 
         let fetchActivitiesString = """
         SELECT * FROM activities WHERE id = '\(id)';
@@ -66,28 +62,27 @@ struct ActivityStorageController {
             for storeActivity in storedActivites {
                 if let occurencesArr = arr(fromJson: storeActivity["occurrences"] as! String) as? [String] {
                     activity = Activity(id: storeActivity["id"] as! Int,
-                                                title:storeActivity["name"] as! String,
-                                                pastOccurences: occurencesArr.map{$0.toDate()!})
-
-                    }
+                                        title: storeActivity["name"] as! String,
+                                        pastOccurences: occurencesArr.map { $0.toDate()! })
                 }
             }
+        }
         return activity
     }
 
     func insertActivity(activityTitle: String, date: Date) {
         if let dateString = date.toString(), let jsonstr = json(from: [dateString]) {
             let insertActivityStatement = """
-                INSERT INTO activities(name, occurrences)
-                values(?,?);
-                """
+            INSERT INTO activities(name, occurrences)
+            values(?,?);
+            """
             storage.insert(insertString: insertActivityStatement, parameters: [activityTitle, jsonstr])
             notify()
         }
     }
 
     func update(activity: Activity, date: Date) {
-        var updatedOccurences = activity.pastOccurences.map{$0.toString()}
+        var updatedOccurences = activity.pastOccurences.map { $0.toString() }
         updatedOccurences.append(date.toString())
         if let jsonString = json(from: updatedOccurences as [Any]) {
             let updateActivityStatement = """
@@ -97,12 +92,12 @@ struct ActivityStorageController {
             notify()
         }
     }
-    
+
     func delete(activity: Activity) {
         let deleteActivityStatement = """
             DELETE FROM activities where id = '\(activity.id)';
         """
-        
+
         storage.delete(deleteString: deleteActivityStatement)
         notify()
     }
@@ -113,23 +108,22 @@ struct ActivityStorageController {
     }
 }
 
-
 extension ActivityStorageController {
-    func json(from object:[Any]) -> String? {
+    func json(from object: [Any]) -> String? {
         guard let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
             return nil
         }
         return String(data: data, encoding: String.Encoding.utf8)
     }
 
-    func arr(fromJson:String) -> [Any]? {
+    func arr(fromJson: String) -> [Any]? {
         if let jsonData = fromJson.data(using: .utf8) {
             do {
-                    return try JSONSerialization.jsonObject(with: jsonData, options: []) as? [Any]
-                } catch {
-                    return nil
-                }
+                return try JSONSerialization.jsonObject(with: jsonData, options: []) as? [Any]
+            } catch {
+                return nil
             }
+        }
         return nil
     }
 }
@@ -139,7 +133,7 @@ extension Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-yyyy"
         let stringDate: String = formatter.string(from: self)
-        
+
         return stringDate
     }
 }
@@ -149,7 +143,7 @@ extension String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         let dateFromString: Date? = dateFormatter.date(from: self)
-        
+
         return dateFromString
     }
 }

@@ -72,7 +72,6 @@ public struct Storage {
     }
 
     public func update(updateString: String, parameters: [Any?]) -> Bool {
-        
         var queryStatement: OpaquePointer?
         var success = false
         if sqlite3_prepare_v2(db, updateString, -1, &queryStatement, nil) == SQLITE_OK {
