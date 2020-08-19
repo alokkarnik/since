@@ -19,11 +19,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.backgroundColor = .clear
         tableView.dataSource = self
         tableView.delegate = self
-
+        tableView.separatorStyle = .none
         activityData = storageController.getAllActivities()
+        addButton.backgroundColor = UIColor.hexColour(hexValue: 0xEEB357, alpha: 1)
+        addButton.titleLabel?.textColor = UIColor.hexColour(hexValue: 0xE9ECEE, alpha: 1)
+
         let nc = NotificationCenter.default
         nc.addObserver(self, selector: #selector(updateDateForActivity), name: NSNotification.Name(rawValue: "datePicked"), object: nil)
 
@@ -33,8 +35,9 @@ class ViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: addButton.bounds.height + 50))
-        addButton.layer.cornerRadius = addButton.bounds.size.width/2
+
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: addButton.frame.height + 30, right: 0)
+        addButton.layer.cornerRadius = addButton.frame.height/2
         addButton.clipsToBounds = true
         addButton.titleLabel?.textAlignment = .center
     }
@@ -98,7 +101,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         if let activity = activityData?[indexPath.row] {
             cell.activityLabel.text = activity.title
-            cell.sinceLabel.text = String(activity.daysSinceLastOccurence) + " days"
+            cell.sinceLabel.text = String(activity.daysSinceLastOccurence)
         }
 
         return cell

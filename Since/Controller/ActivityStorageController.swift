@@ -13,7 +13,7 @@ protocol ActivityDataProtocol {
 }
 
 struct ActivityStorageController {
-    var storage = Storage(databaseName: "activityStorage.sqlite")
+    var storage = Storage(databaseName: "activityStorage")
     
     init() {
         initializeStorage()
@@ -26,7 +26,7 @@ struct ActivityStorageController {
             name text,
             occurrences text);
             """
-        storage.createTable(createTableString: createTableString)
+        _ = storage.createTable(createTableString: createTableString)
     }
     
     func getAllActivities() -> [Activity]? {
