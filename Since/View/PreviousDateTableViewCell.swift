@@ -21,6 +21,9 @@ class PreviousDateTableViewCell: UITableViewCell {
 
     @IBOutlet var cancelButtonWidthConstraint: NSLayoutConstraint!
 
+    @IBOutlet var dateLabelUpperConstraint: NSLayoutConstraint!
+    @IBOutlet var dateLabelLowerConstraint: NSLayoutConstraint!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -48,7 +51,9 @@ class PreviousDateTableViewCell: UITableViewCell {
             lowerVerticalView.isHidden = true
             lowerHorizontalView.isHidden = true
             middleVerticalView.isHidden = true
+            dateLabelLowerConstraint.constant = 30
         }
+
         if isFirstCell {
             upperVerticalView.isHidden = true
         }
@@ -59,6 +64,8 @@ class PreviousDateTableViewCell: UITableViewCell {
             middleVerticalView.isHidden = true
             lowerVerticalView.isHidden = true
             lowerHorizontalView.isHidden = true
+            dateLabelLowerConstraint.constant = 30
+            dateLabelUpperConstraint.constant = 30
         }
     }
 
@@ -68,5 +75,7 @@ class PreviousDateTableViewCell: UITableViewCell {
         middleVerticalView.isHidden = false
         lowerVerticalView.isHidden = false
         lowerHorizontalView.isHidden = false
+        dateLabelLowerConstraint.constant = 60
+        dateLabelUpperConstraint.constant = 20
     }
 }

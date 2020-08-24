@@ -352,14 +352,14 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PYF-A0-C2g" userLabel="Middle vertical">
-                                                                    <rect key="frame" x="43" y="33" width="2" height="47"/>
+                                                                    <rect key="frame" x="43" y="30" width="2" height="50"/>
                                                                     <color key="backgroundColor" red="0.92549019610000005" green="0.6588235294" blue="0.21176470589999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="2" id="Szy-dD-rBi"/>
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="snA-Jb-95v" userLabel="Upper horizontal">
-                                                                    <rect key="frame" x="0.0" y="33" width="45" height="2"/>
+                                                                    <rect key="frame" x="0.0" y="30" width="45" height="2"/>
                                                                     <color key="backgroundColor" red="0.92549019610000005" green="0.6588235294" blue="0.21176470589999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="2" id="vgS-QO-70e"/>
@@ -373,7 +373,7 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GyV-ZD-zx4" userLabel="Upper vertical">
-                                                                    <rect key="frame" x="43" y="0.0" width="2" height="33"/>
+                                                                    <rect key="frame" x="43" y="0.0" width="2" height="30"/>
                                                                     <color key="backgroundColor" red="0.92549019610000005" green="0.6588235294" blue="0.21176470589999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="2" id="hzO-Za-aPZ"/>
@@ -391,7 +391,7 @@
                                                                 <constraint firstAttribute="bottom" secondItem="yNA-ao-iSC" secondAttribute="bottom" id="FU2-MI-11e"/>
                                                                 <constraint firstAttribute="trailing" secondItem="GyV-ZD-zx4" secondAttribute="trailing" constant="40" id="JbN-go-PX8"/>
                                                                 <constraint firstItem="snA-Jb-95v" firstAttribute="leading" secondItem="WLt-l0-cHG" secondAttribute="leading" id="Rgi-K5-IU3"/>
-                                                                <constraint firstItem="snA-Jb-95v" firstAttribute="top" secondItem="WLt-l0-cHG" secondAttribute="top" constant="33" id="TKN-Hx-HPB"/>
+                                                                <constraint firstItem="snA-Jb-95v" firstAttribute="top" secondItem="WLt-l0-cHG" secondAttribute="top" constant="30" id="TKN-Hx-HPB"/>
                                                                 <constraint firstAttribute="trailing" secondItem="iES-yb-L2e" secondAttribute="trailing" id="jr6-7g-T2I"/>
                                                                 <constraint firstItem="PYF-A0-C2g" firstAttribute="top" secondItem="snA-Jb-95v" secondAttribute="bottom" constant="-2" id="nqg-pp-XCA"/>
                                                                 <constraint firstAttribute="trailing" secondItem="snA-Jb-95v" secondAttribute="trailing" constant="40" id="ohZ-JD-euK"/>
@@ -418,6 +418,8 @@
                                                     <outlet property="cancelButton" destination="HYh-8Q-tDN" id="tmU-V2-94z"/>
                                                     <outlet property="cancelButtonWidthConstraint" destination="WaD-M0-NWE" id="0sF-kH-TxM"/>
                                                     <outlet property="dateLabel" destination="GN8-7u-dlp" id="okJ-X8-7Ns"/>
+                                                    <outlet property="dateLabelLowerConstraint" destination="Mhv-gY-zvY" id="gB5-Se-4d5"/>
+                                                    <outlet property="dateLabelUpperConstraint" destination="JX8-UC-FcN" id="Qvp-v9-mbJ"/>
                                                     <outlet property="daysSinceLabel" destination="oTZ-EV-hSh" id="KSx-hQ-Hf1"/>
                                                     <outlet property="lowerHorizontalView" destination="iES-yb-L2e" id="uEV-oB-cR6"/>
                                                     <outlet property="lowerVerticalView" destination="yNA-ao-iSC" id="mGd-cb-rCj"/>
