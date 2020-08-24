@@ -24,7 +24,6 @@ class ViewController: UIViewController {
         activityData = storageController.getAllActivities()
         addButton.backgroundColor = UIColor.hexColour(hexValue: 0xEEB357, alpha: 1)
         addButton.titleLabel?.textColor = UIColor.hexColour(hexValue: 0xE9ECEE, alpha: 1)
-
         let nc = NotificationCenter.default
         nc.addObserver(self, selector: #selector(updateDateForActivity), name: NSNotification.Name(rawValue: "datePicked"), object: nil)
 
@@ -51,7 +50,7 @@ class ViewController: UIViewController {
     }
 
     func showDatePickerAlertController(activity: Activity) {
-        let activityAlertController = UIAlertController(title: "Select date", message: nil, preferredStyle: .actionSheet)
+        let activityAlertController = UIAlertController(title: "Select action", message: nil, preferredStyle: .actionSheet)
 
         activityAlertController.addAction(UIAlertAction(title: "Today", style: .default, handler: { _ in
             self.updateDateOccuredForAction(date: Date(), activity: activity)
@@ -59,6 +58,13 @@ class ViewController: UIViewController {
 
         activityAlertController.addAction(UIAlertAction(title: "Custom", style: .default, handler: { _ in
             self.showDatePicker(forActivity: activity)
+        }))
+
+        activityAlertController.addAction(UIAlertAction(title: "Details", style: .default, handler: { _ in
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "activityDetailVC") as? ActivityDetailViewController {
+                vc.setupWithActivity(activity)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }))
 
         activityAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
