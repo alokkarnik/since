@@ -21,14 +21,20 @@ struct Activity {
 
     var daysSinceLastOccurence: Int {
         if let lastOccuredDate = pastOccurences.last {
-            let calendar = Calendar.current
-
-            let today = calendar.startOfDay(for: Date())
-            let date = calendar.startOfDay(for: lastOccuredDate)
-
-            let components = calendar.dateComponents([.day], from: date, to: today)
-            return components.day ?? 0
+            return lastOccuredDate.differenceInDaysFrom(Date())
         }
         return 0
+    }
+}
+
+extension Date {
+    func differenceInDaysFrom(_ otherDate: Date) -> Int {
+        let calendar = Calendar.current
+
+        let today = calendar.startOfDay(for: otherDate)
+        let date = calendar.startOfDay(for: self)
+
+        let components = calendar.dateComponents([.day], from: date, to: today)
+        return components.day ?? 0
     }
 }

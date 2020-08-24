@@ -37,6 +37,10 @@ class ActivityDetailViewController: UIViewController {
         activityLabel.text = activity.title
         occurrenceTableView.delegate = self
         occurrenceTableView.dataSource = self
+
+        occurrenceTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+        occurrenceTableView.tableFooterView = UIView()
+        occurrenceTableView.separatorStyle = .none
     }
 
     func setupWithActivity(_ activityToUpdate: Activity) {
@@ -50,8 +54,21 @@ extension ActivityDetailViewController: UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = "\(activity.pastOccurences[indexPath.row])"
+        let cell = occurrenceTableView.dequeueReusableCell(withIdentifier: "previousDateTableViewCell") as! PreviousDateTableViewCell
+        var isFirstCell = false
+        if indexPath.row == 0 {
+            isFirstCell = true
+        }
+
+        var isOnlyCell = false
+        if activity.pastOccurences.count == 1 {
+            isOnlyCell = true
+        }
+        if indexPath.row < activity.pastOccurences.count - 1 {
+            cell.setupWith(associatedDate: activity.pastOccurences[indexPath.row], andPreviousDate: activity.pastOccurences[indexPath.row + 1], isFirstCell: isFirstCell, isOnlyCell: isOnlyCell)
+        } else {
+            cell.setupWith(associatedDate: activity.pastOccurences[indexPath.row], andPreviousDate: nil, isFirstCell: isFirstCell, isOnlyCell: isOnlyCell)
+        }
         return cell
     }
 
