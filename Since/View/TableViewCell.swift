@@ -31,9 +31,9 @@ class TableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         if selected {
-            cellBackgroundView.backgroundColor = UIColor.hexColour(hexValue: 0xEEB357, alpha: 1)
+            cellBackgroundView.backgroundColor = UIColor.thatYellowColour()
         } else {
-            cellBackgroundView.backgroundColor = UIColor.hexColour(hexValue: 0xE9ECEE, alpha: 1)
+            cellBackgroundView.backgroundColor = .white
         }
     }
 }
@@ -44,5 +44,13 @@ extension UIColor {
         let green = Double((hexValue & 0xFF00) >> 8) / 255.0
         let blue = Double(hexValue & 0xFF) / 255.0
         return UIColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: alpha)
+    }
+
+    static func thatYellowColour() -> UIColor {
+        return UIColor.hexColour(hexValue: 0xEEB357, alpha: 1)
+    }
+
+    static func thatGreyColour() -> UIColor {
+        return UIColor.hexColour(hexValue: 0xE9ECEE, alpha: 1)
     }
 }

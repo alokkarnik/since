@@ -41,6 +41,7 @@ class ActivityDetailViewController: UIViewController {
         occurrenceTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         occurrenceTableView.tableFooterView = UIView()
         occurrenceTableView.separatorStyle = .none
+        occurrenceTableView.backgroundColor = UIColor.hexColour(hexValue: 0xE5E5E5, alpha: 1)
     }
 
     func setupWithActivity(_ activityToUpdate: Activity) {
@@ -76,7 +77,7 @@ extension ActivityDetailViewController: UITableViewDelegate, UITableViewDataSour
         return "   Past Occurrences"
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_: UITableView, heightForHeaderInSection _: Int) -> CGFloat {
         return 40
     }
 }

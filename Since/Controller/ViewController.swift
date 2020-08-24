@@ -94,7 +94,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SinceCell") as! TableViewCell
-
+        cell.setSelected(false, animated: true)
         if let activity = activityData?[indexPath.row] {
             cell.activityLabel.text = activity.title
             cell.sinceLabel.text = String(activity.daysSinceLastOccurence)
