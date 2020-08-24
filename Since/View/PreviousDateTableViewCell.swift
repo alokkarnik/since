@@ -45,7 +45,7 @@ class PreviousDateTableViewCell: UITableViewCell {
         dateFormatter.dateFormat = "d MMM, yyyy"
         dateLabel.text = dateFormatter.string(from: associatedDate)
         if let previousDate = previousDate {
-            daysSinceLabel.text = "\(associatedDate.differenceInDaysFrom(previousDate)) days"
+            daysSinceLabel.text = "\(abs(associatedDate.differenceInDaysFrom(previousDate))) days"
         } else {
             daysSinceLabel.text = ""
             lowerVerticalView.isHidden = true

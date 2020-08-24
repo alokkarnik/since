@@ -73,6 +73,10 @@ extension ActivityDetailViewController: UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_: UITableView, titleForHeaderInSection _: Int) -> String? {
-        return "Past"
+        return "   Past Occurrences"
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
     }
 }
