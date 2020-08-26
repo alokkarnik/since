@@ -24,58 +24,85 @@ class PreviousDateTableViewCell: UITableViewCell {
     @IBOutlet var dateLabelUpperConstraint: NSLayoutConstraint!
     @IBOutlet var dateLabelLowerConstraint: NSLayoutConstraint!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
+    var editMode: Bool = false
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        cancelButtonWidthConstraint.constant = 0
+        if !editMode {
+            cancelButtonWidthConstraint.constant = 0
+        }
     }
 
     func setupWith(associatedDate: Date, andPreviousDate previousDate: Date?, isFirstCell: Bool = false, isOnlyCell: Bool = false) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMM, yyyy"
-        dateLabel.text = dateFormatter.string(from: associatedDate)
+        dateLabel.text = formattedDate(date: associatedDate)
+
         if let previousDate = previousDate {
             daysSinceLabel.text = "\(abs(associatedDate.differenceInDaysFrom(previousDate))) days"
         } else {
-            daysSinceLabel.text = ""
+            daysSinceLabel.isHidden = true
             lowerVerticalView.isHidden = true
             lowerHorizontalView.isHidden = true
             middleVerticalView.isHidden = true
             dateLabelLowerConstraint.constant = 30
+        }
+
+        if editMode {
+            showEditMode()
         }
 
         if isFirstCell {
-            upperVerticalView.isHidden = true
+            applyStyleForFirstCell()
         }
 
         if isOnlyCell {
-            upperVerticalView.isHidden = true
-            upperHorizontalView.isHidden = true
-            middleVerticalView.isHidden = true
-            lowerVerticalView.isHidden = true
-            lowerHorizontalView.isHidden = true
-            dateLabelLowerConstraint.constant = 30
-            dateLabelUpperConstraint.constant = 30
+            applyStyleForSingeCell()
         }
     }
 
     override func prepareForReuse() {
+        showAllDifferenceViews()
+        dateLabelLowerConstraint.constant = 60
+        dateLabelUpperConstraint.constant = 20
+    }
+}
+
+extension PreviousDateTableViewCell {
+    private func showEditMode() {
+        cancelButtonWidthConstraint.constant = 30
+        hideAllDifferenceViews()
+        daysSinceLabel.isHidden = true
+    }
+
+    private func applyStyleForFirstCell() {
+        upperVerticalView.isHidden = true
+    }
+
+    private func applyStyleForSingeCell() {
+        hideAllDifferenceViews()
+        dateLabelLowerConstraint.constant = 30
+        dateLabelUpperConstraint.constant = 30
+    }
+
+    private func hideAllDifferenceViews() {
+        upperVerticalView.isHidden = true
+        upperHorizontalView.isHidden = true
+        middleVerticalView.isHidden = true
+        lowerVerticalView.isHidden = true
+        lowerHorizontalView.isHidden = true
+    }
+
+    private func showAllDifferenceViews() {
         upperVerticalView.isHidden = false
         upperHorizontalView.isHidden = false
         middleVerticalView.isHidden = false
         lowerVerticalView.isHidden = false
         lowerHorizontalView.isHidden = false
-        dateLabelLowerConstraint.constant = 60
-        dateLabelUpperConstraint.constant = 20
+    }
+
+    private func formattedDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMM, yyyy"
+
+        return dateFormatter.string(from: date)
     }
 }
