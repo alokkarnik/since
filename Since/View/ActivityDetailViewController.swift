@@ -10,22 +10,41 @@ import UIKit
 
 class ActivityDetailViewController: UIViewController {
     @IBOutlet var tableViewContainer: UIView!
-    private var activity: Activity!
+    var activity: Activity!
 
     @IBOutlet var activityLabel: UILabel!
     @IBOutlet var daysLabel: UILabel!
     @IBOutlet var occurrenceTableView: UITableView!
 
+    private var editMode: Bool = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        daysLabel.text = "\(activity.daysSinceLastOccurence)"
+        activityLabel.text = activity.title
 
-        // Do any additional setup after loading the view.
-        tableViewContainer.layer.cornerRadius = 30
-        tableViewContainer.clipsToBounds = true
-        tableViewContainer.layer.shadowOffset = .zero
-        tableViewContainer.layer.shadowRadius = 10
-        tableViewContainer.layer.shadowColor = UIColor.black.cgColor
-        tableViewContainer.layer.shadowOpacity = 1
+        setupTableView()
+        setupNavigationController()
+    }
+
+    @objc private func setEditMode() {
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(setEditMode))
+
+        if editMode {
+            editMode = false
+        } else {
+            editButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(setEditMode))
+            editMode = true
+        }
+
+        navigationItem.rightBarButtonItems = [editButton, deleteButton]
+        occurrenceTableView.reloadData()
+    }
+}
+
+extension ActivityDetailViewController {
+    private func setupNavigationController() {
         navigationItem.largeTitleDisplayMode = .never
         navigationController?.navigationBar.barTintColor = UIColor.hexColour(hexValue: 0xEEB357, alpha: 1)
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -33,19 +52,29 @@ class ActivityDetailViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.tintColor = .black
 
-        daysLabel.text = "\(activity.daysSinceLastOccurence)"
-        activityLabel.text = activity.title
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
+        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(setEditMode))
+
+        navigationItem.rightBarButtonItems = [editButton, deleteButton]
+    }
+
+    private func setupTableView() {
         occurrenceTableView.delegate = self
         occurrenceTableView.dataSource = self
+
+        tableViewContainer.layer.cornerRadius = 30
+        tableViewContainer.clipsToBounds = true
+
+        // Setup shadow
+        tableViewContainer.layer.shadowOffset = .zero
+        tableViewContainer.layer.shadowRadius = 10
+        tableViewContainer.layer.shadowColor = UIColor.black.cgColor
+        tableViewContainer.layer.shadowOpacity = 1
 
         occurrenceTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         occurrenceTableView.tableFooterView = UIView()
         occurrenceTableView.separatorStyle = .none
         occurrenceTableView.backgroundColor = UIColor.hexColour(hexValue: 0xE5E5E5, alpha: 1)
-    }
-
-    func setupWithActivity(_ activityToUpdate: Activity) {
-        activity = activityToUpdate
     }
 }
 
@@ -56,15 +85,12 @@ extension ActivityDetailViewController: UITableViewDelegate, UITableViewDataSour
 
     func tableView(_: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = occurrenceTableView.dequeueReusableCell(withIdentifier: "previousDateTableViewCell") as! PreviousDateTableViewCell
-        var isFirstCell = false
-        if indexPath.row == 0 {
-            isFirstCell = true
-        }
 
-        var isOnlyCell = false
-        if activity.pastOccurences.count == 1 {
-            isOnlyCell = true
-        }
+        let isFirstCell: Bool = indexPath.row == 0 ? true : false
+        cell.editMode = editMode
+
+        let isOnlyCell = activity.pastOccurences.count == 1 ? true : false
+
         if indexPath.row < activity.pastOccurences.count - 1 {
             cell.setupWith(associatedDate: activity.pastOccurences[indexPath.row], andPreviousDate: activity.pastOccurences[indexPath.row + 1], isFirstCell: isFirstCell, isOnlyCell: isOnlyCell)
         } else {
