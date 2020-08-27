@@ -12,11 +12,13 @@ struct Activity {
     let id: Int
     let title: String
     var pastOccurences: [Date]
+    var pastOccurencesToDisplay: [Date]
 
     init(id: Int, title: String, pastOccurences: [Date]) {
         self.id = id
         self.title = title
         self.pastOccurences = pastOccurences
+        pastOccurencesToDisplay = pastOccurences.reversed()
     }
 
     var daysSinceLastOccurence: Int {
@@ -24,6 +26,14 @@ struct Activity {
             return lastOccuredDate.differenceInDaysFrom(Date())
         }
         return 0
+    }
+
+    mutating func saveUpdates() {
+        pastOccurences = pastOccurencesToDisplay.reversed()
+    }
+
+    mutating func resetUpdates() {
+        pastOccurencesToDisplay = pastOccurences.reversed()
     }
 }
 

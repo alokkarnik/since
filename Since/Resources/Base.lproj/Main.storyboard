@@ -323,6 +323,9 @@
                                                                     </constraints>
                                                                     <color key="tintColor" systemColor="systemRedColor"/>
                                                                     <state key="normal" image="xmark" catalog="system"/>
+                                                                    <connections>
+                                                                        <action selector="deleteDate:" destination="jLt-ZN-1BZ" eventType="touchUpInside" id="f8E-u4-NI1"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31 Aug 2020" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GN8-7u-dlp">
                                                                     <rect key="frame" x="35" y="0.0" width="110" height="22.333333333333332"/>

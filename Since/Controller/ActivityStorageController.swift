@@ -81,9 +81,11 @@ struct ActivityStorageController {
         }
     }
 
-    func update(activity: Activity, date: Date) {
+    func update(activity: Activity, date: Date?) {
         var updatedOccurences = activity.pastOccurences.map { $0.toString() }
-        updatedOccurences.append(date.toString())
+        if let date = date {
+            updatedOccurences.append(date.toString())
+        }
         if let jsonString = json(from: updatedOccurences as [Any]) {
             let updateActivityStatement = """
             UPDATE activities SET occurrences = ? WHERE id = ?;

@@ -11,6 +11,7 @@ import UIKit
 class ActivityDetailViewController: UIViewController {
     @IBOutlet var tableViewContainer: UIView!
     var activity: Activity!
+    var storageController = ActivityStorageController()
 
     @IBOutlet var activityLabel: UILabel!
     @IBOutlet var daysLabel: UILabel!
@@ -20,26 +21,60 @@ class ActivityDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        daysLabel.text = "\(activity.daysSinceLastOccurence)"
         activityLabel.text = activity.title
+        updateDaysSinceLabel()
 
         setupTableView()
         setupNavigationController()
     }
 
-    @objc private func setEditMode() {
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
-        var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(setEditMode))
+    @objc private func editActivity() {
+        editMode = true
 
-        if editMode {
-            editMode = false
-        } else {
-            editButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(setEditMode))
-            editMode = true
-        }
-
-        navigationItem.rightBarButtonItems = [editButton, deleteButton]
+        navigationItem.rightBarButtonItems = getNavigationItemsForEditMode()
         occurrenceTableView.reloadData()
+    }
+
+    @objc private func saveChanges() {
+        editMode = false
+
+        let alertView = UIAlertController(title: "Save changes?", message: "This action is not reversible", preferredStyle: .alert)
+        alertView.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertView.addAction(UIAlertAction(title: "Save", style: .default, handler: {
+            (_: UIAlertAction!) in
+            self.activity.saveUpdates()
+            self.storageController.update(activity: self.activity, date: nil)
+            self.updateDaysSinceLabel()
+
+            self.navigationItem.rightBarButtonItems = self.getNavigationItemsForNormal()
+            self.occurrenceTableView.reloadData()
+        }))
+
+        navigationController?.present(alertView, animated: true, completion: nil)
+    }
+
+    @objc private func cancelChanges() {
+        editMode = false
+
+        activity.resetUpdates()
+        navigationItem.rightBarButtonItems = getNavigationItemsForNormal()
+        occurrenceTableView.reloadData()
+    }
+
+    @objc private func deleteActivity() {
+        let alertView = UIAlertController(title: "Delete activity?", message: "This action is not reversible", preferredStyle: .alert)
+        alertView.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertView.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {
+            (_: UIAlertAction!) in
+            self.storageController.delete(activity: self.activity)
+            self.navigationController?.popViewController(animated: true)
+        }))
+
+        navigationController?.present(alertView, animated: true, completion: nil)
+    }
+
+    private func updateDaysSinceLabel() {
+        daysLabel.text = "\(activity.daysSinceLastOccurence)"
     }
 }
 
@@ -52,10 +87,7 @@ extension ActivityDetailViewController {
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.tintColor = .black
 
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: nil)
-        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(setEditMode))
-
-        navigationItem.rightBarButtonItems = [editButton, deleteButton]
+        navigationItem.rightBarButtonItems = getNavigationItemsForNormal()
     }
 
     private func setupTableView() {
@@ -76,26 +108,49 @@ extension ActivityDetailViewController {
         occurrenceTableView.separatorStyle = .none
         occurrenceTableView.backgroundColor = UIColor.hexColour(hexValue: 0xE5E5E5, alpha: 1)
     }
+
+    private func getNavigationItemsForNormal() -> [UIBarButtonItem] {
+        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editActivity))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteActivity))
+        deleteButton.tintColor = .red
+        return [editButton, deleteButton]
+    }
+
+    private func getNavigationItemsForEditMode() -> [UIBarButtonItem] {
+        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveChanges))
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelChanges))
+        cancelButton.tintColor = .red
+        return [saveButton, cancelButton]
+    }
+}
+
+extension ActivityDetailViewController: PreviousDateCellProtocol {
+    func removeDate(cell: PreviousDateTableViewCell) {
+        let indexPath = occurrenceTableView.indexPath(for: cell)!
+        activity.pastOccurencesToDisplay.remove(at: indexPath.row)
+        occurrenceTableView.deleteRows(at: [indexPath], with: .automatic)
+    }
 }
 
 extension ActivityDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        activity.pastOccurences.count
+        activity.pastOccurencesToDisplay.count
     }
 
     func tableView(_: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = occurrenceTableView.dequeueReusableCell(withIdentifier: "previousDateTableViewCell") as! PreviousDateTableViewCell
-
-        let isFirstCell: Bool = indexPath.row == 0 ? true : false
+        cell.delegate = self
         cell.editMode = editMode
 
-        let isOnlyCell = activity.pastOccurences.count == 1 ? true : false
+        let isFirstCell: Bool = indexPath.row == 0 ? true : false
+        let isOnlyCell = activity.pastOccurencesToDisplay.count == 1 ? true : false
 
-        if indexPath.row < activity.pastOccurences.count - 1 {
-            cell.setupWith(associatedDate: activity.pastOccurences[indexPath.row], andPreviousDate: activity.pastOccurences[indexPath.row + 1], isFirstCell: isFirstCell, isOnlyCell: isOnlyCell)
+        if indexPath.row < activity.pastOccurencesToDisplay.count - 1 {
+            cell.setupWith(associatedDate: activity.pastOccurencesToDisplay[indexPath.row], andPreviousDate: activity.pastOccurencesToDisplay[indexPath.row + 1], isFirstCell: isFirstCell, isOnlyCell: isOnlyCell)
         } else {
-            cell.setupWith(associatedDate: activity.pastOccurences[indexPath.row], andPreviousDate: nil, isFirstCell: isFirstCell, isOnlyCell: isOnlyCell)
+            cell.setupWith(associatedDate: activity.pastOccurencesToDisplay[indexPath.row], andPreviousDate: nil, isFirstCell: isFirstCell, isOnlyCell: isOnlyCell)
         }
+
         return cell
     }
 

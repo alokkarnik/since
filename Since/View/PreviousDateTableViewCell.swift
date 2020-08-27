@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol PreviousDateCellProtocol: AnyObject {
+    func removeDate(cell: PreviousDateTableViewCell)
+}
+
 class PreviousDateTableViewCell: UITableViewCell {
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var daysSinceLabel: UILabel!
@@ -26,6 +30,8 @@ class PreviousDateTableViewCell: UITableViewCell {
 
     var editMode: Bool = false
 
+    weak var delegate: PreviousDateCellProtocol?
+
     override func layoutSubviews() {
         super.layoutSubviews()
         if !editMode {
@@ -37,6 +43,7 @@ class PreviousDateTableViewCell: UITableViewCell {
         dateLabel.text = formattedDate(date: associatedDate)
 
         if let previousDate = previousDate {
+            daysSinceLabel.isHidden = false
             daysSinceLabel.text = "\(abs(associatedDate.differenceInDaysFrom(previousDate))) days"
         } else {
             daysSinceLabel.isHidden = true
@@ -63,6 +70,12 @@ class PreviousDateTableViewCell: UITableViewCell {
         showAllDifferenceViews()
         dateLabelLowerConstraint.constant = 60
         dateLabelUpperConstraint.constant = 20
+    }
+
+    @IBAction func deleteDate(_: Any) {
+        if let delegate = delegate {
+            delegate.removeDate(cell: self)
+        }
     }
 }
 
