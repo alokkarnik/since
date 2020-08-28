@@ -18,6 +18,7 @@
 		5C54D324241ABC1A00C35F02 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C54D323241ABC1A00C35F02 /* DatePickerViewController.swift */; };
 		5CA5028F24168A41001C4071 /* ActivityStorageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA5028E24168A41001C4071 /* ActivityStorageController.swift */; };
 		5CB9EF81241814D200734210 /* AddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9EF80241814D200734210 /* AddActivityViewController.swift */; };
+		5CC508F324F91F0600F7428C /* AddActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC508F224F91F0600F7428C /* AddActivityVC.swift */; };
 		5CC78F0924EEF2A4007E0ADD /* ActivityDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC78F0824EEF2A4007E0ADD /* ActivityDetailViewController.swift */; };
 		5CE738F123EC675200B12515 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE738F023EC675200B12515 /* Storage.swift */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		5C54D323241ABC1A00C35F02 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		5CA5028E24168A41001C4071 /* ActivityStorageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStorageController.swift; sourceTree = "<group>"; };
 		5CB9EF80241814D200734210 /* AddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityViewController.swift; sourceTree = "<group>"; };
+		5CC508F224F91F0600F7428C /* AddActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityVC.swift; sourceTree = "<group>"; };
 		5CC78F0824EEF2A4007E0ADD /* ActivityDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailViewController.swift; sourceTree = "<group>"; };
 		5CE738F023EC675200B12515 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +118,7 @@
 				5CC78F0824EEF2A4007E0ADD /* ActivityDetailViewController.swift */,
 				5C0403E023BE546D0055271C /* ViewController.swift */,
 				5CA5028E24168A41001C4071 /* ActivityStorageController.swift */,
+				5CC508F224F91F0600F7428C /* AddActivityVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 				5CA5028F24168A41001C4071 /* ActivityStorageController.swift in Sources */,
 				5CC78F0924EEF2A4007E0ADD /* ActivityDetailViewController.swift in Sources */,
 				5C0403E123BE546D0055271C /* ViewController.swift in Sources */,
+				5CC508F324F91F0600F7428C /* AddActivityVC.swift in Sources */,
 				5C54D324241ABC1A00C35F02 /* DatePickerViewController.swift in Sources */,
 				5C09112824F2EBA400F8E4F2 /* PreviousDateTableViewCell.swift in Sources */,
 				5CB9EF81241814D200734210 /* AddActivityViewController.swift in Sources */,
