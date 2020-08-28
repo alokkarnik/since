@@ -14,8 +14,6 @@ class AddActivityViewController: UIViewController {
     @IBOutlet var addActivity: UIButton!
     @IBOutlet var dateButton: UIButton!
 
-    var storageController = ActivityStorageController()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         modalPresentationStyle = .fullScreen
@@ -45,7 +43,7 @@ class AddActivityViewController: UIViewController {
     @IBAction func addActivityButtonTapped(_: Any) {
         if let title = addActivityTextField.text, title.count > 0 {
             let date = dateButton.titleLabel?.text?.toDate() ?? Date()
-            storageController.insertActivity(activityTitle: title, date: date)
+            ActivityStorageController.sharedStorage.insertActivity(activityTitle: title, date: date)
             dismiss(animated: true, completion: nil)
         }
     }

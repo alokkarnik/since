@@ -11,9 +11,10 @@ import Foundation
 protocol ActivityDataProtocol {}
 
 struct ActivityStorageController {
-    var storage = Storage(databaseName: "activityStorage")
+    private var storage = Storage(databaseName: "activityStorage")
+    static var sharedStorage = ActivityStorageController()
 
-    init() {
+    private init() {
         initializeStorage()
     }
 

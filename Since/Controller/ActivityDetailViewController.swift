@@ -11,7 +11,6 @@ import UIKit
 class ActivityDetailViewController: UIViewController {
     @IBOutlet var tableViewContainer: UIView!
     var activity: Activity!
-    var storageController = ActivityStorageController()
 
     @IBOutlet var activityLabel: UILabel!
     @IBOutlet var daysLabel: UILabel!
@@ -43,7 +42,7 @@ class ActivityDetailViewController: UIViewController {
         alertView.addAction(UIAlertAction(title: "Save", style: .default, handler: {
             (_: UIAlertAction!) in
             self.activity.saveUpdates()
-            self.storageController.update(activity: self.activity, date: nil)
+            ActivityStorageController.sharedStorage.update(activity: self.activity, date: nil)
             self.updateDaysSinceLabel()
 
             self.navigationItem.rightBarButtonItems = self.getNavigationItemsForNormal()
@@ -66,7 +65,7 @@ class ActivityDetailViewController: UIViewController {
         alertView.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertView.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {
             (_: UIAlertAction!) in
-            self.storageController.delete(activity: self.activity)
+            ActivityStorageController.sharedStorage.delete(activity: self.activity)
             self.navigationController?.popViewController(animated: true)
         }))
 

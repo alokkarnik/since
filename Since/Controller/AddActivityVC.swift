@@ -15,7 +15,6 @@ class AddActivityVC: UIViewController {
     @IBOutlet var activityDatePicker: UIDatePicker!
     @IBOutlet var inputContainerView: UIView!
 
-    var storageController = ActivityStorageController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +46,7 @@ class AddActivityVC: UIViewController {
     @IBAction func saveButtonTapped(_: Any) {
         if let title = activityNameTextView.text, title.count > 0 {
             let date = activityDatePicker.date
-            storageController.insertActivity(activityTitle: title, date: date)
+            ActivityStorageController.sharedStorage.insertActivity(activityTitle: title, date: date)
             dismiss(animated: true, completion: nil)
         }
     }

@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     @IBOutlet var addButton: UIButton!
 
     var activityData: [Activity]?
-    var storageController = ActivityStorageController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +20,7 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
-        activityData = storageController.getAllActivities()
+        activityData = ActivityStorageController.sharedStorage.getAllActivities()
         addButton.backgroundColor = UIColor.hexColour(hexValue: 0xEEB357, alpha: 1)
         addButton.titleLabel?.textColor = UIColor.hexColour(hexValue: 0xE9ECEE, alpha: 1)
         let nc = NotificationCenter.default
@@ -45,7 +44,7 @@ class ViewController: UIViewController {
     }
 
     func reloadData() {
-        activityData = storageController.getAllActivities()
+        activityData = ActivityStorageController.sharedStorage.getAllActivities()
         tableView.reloadData()
     }
 
@@ -62,7 +61,7 @@ class ViewController: UIViewController {
 
         activityAlertController.addAction(UIAlertAction(title: "Details", style: .default, handler: { _ in
             if let vc = self.storyboard?.instantiateViewController(withIdentifier: "activityDetailVC") as? ActivityDetailViewController {
-                vc.setupWithActivity(activity)
+                vc.activity = activity
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }))
@@ -75,14 +74,14 @@ class ViewController: UIViewController {
     @objc func updateDateForActivity(notification: NSNotification) {
         let userInfo: [String: String] = notification.userInfo as! [String: String]
         if let id = userInfo["id"], let date = userInfo["date"]?.toDate() {
-            if let activity = storageController.getActivity(withID: Int(id)!) {
+            if let activity = ActivityStorageController.sharedStorage.getActivity(withID: Int(id)!) {
                 updateDateOccuredForAction(date: date, activity: activity)
             }
         }
     }
 
     func updateDateOccuredForAction(date: Date, activity: Activity) {
-        storageController.update(activity: activity, date: date)
+        ActivityStorageController.sharedStorage.update(activity: activity, date: date)
     }
 
     func showDatePicker(forActivity: Activity) {
@@ -92,7 +91,7 @@ class ViewController: UIViewController {
     }
 
     @objc func refresh() {
-        activityData = storageController.getAllActivities()
+        activityData = ActivityStorageController.sharedStorage.getAllActivities()
         tableView.reloadData()
     }
 }
@@ -140,6 +139,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func delete(uiAlertAction _: UIAlertAction, activity: Activity) {
-        storageController.delete(activity: activity)
+        ActivityStorageController.sharedStorage.delete(activity: activity)
     }
 }
