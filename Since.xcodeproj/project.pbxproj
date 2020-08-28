@@ -84,9 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				5C0403F023BE5A090055271C /* TableViewCell.swift */,
-				5CB9EF80241814D200734210 /* AddActivityViewController.swift */,
-				5C54D323241ABC1A00C35F02 /* DatePickerViewController.swift */,
-				5CC78F0824EEF2A4007E0ADD /* ActivityDetailViewController.swift */,
 				5C09112724F2EBA400F8E4F2 /* PreviousDateTableViewCell.swift */,
 			);
 			path = View;
@@ -114,6 +111,9 @@
 		5CA5029024168E2C001C4071 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				5CB9EF80241814D200734210 /* AddActivityViewController.swift */,
+				5C54D323241ABC1A00C35F02 /* DatePickerViewController.swift */,
+				5CC78F0824EEF2A4007E0ADD /* ActivityDetailViewController.swift */,
 				5C0403E023BE546D0055271C /* ViewController.swift */,
 				5CA5028E24168A41001C4071 /* ActivityStorageController.swift */,
 			);
