@@ -154,7 +154,7 @@
         <!--Add ActivityVC-->
         <scene sceneID="Z1i-wN-gWg">
             <objects>
-                <viewController id="fes-fb-1wr" customClass="AddActivityVC" customModule="Since" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddActivityVC" id="fes-fb-1wr" customClass="AddActivityVC" customModule="Since" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="S6E-cj-YVE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

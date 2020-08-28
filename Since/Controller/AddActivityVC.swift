@@ -15,6 +15,7 @@ class AddActivityVC: UIViewController {
     @IBOutlet var activityDatePicker: UIDatePicker!
     @IBOutlet var inputContainerView: UIView!
 
+    var activity: Activity?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,10 +30,17 @@ class AddActivityVC: UIViewController {
         if #available(iOS 13.4, *) {
             activityDatePicker.preferredDatePickerStyle = .wheels
         }
-        activityNameTextView.delegate = self
-        activityNameTextView.text = "Activity name"
-        activityNameTextView.textColor = .darkGray
-        saveButton.isEnabled = false
+
+        if activity == nil {
+            activityNameTextView.delegate = self
+            activityNameTextView.text = "Activity name"
+            activityNameTextView.textColor = .darkGray
+            saveButton.isEnabled = false
+        } else {
+            activityNameTextView.text = activity?.title
+            activityNameTextView.isEditable = false
+            saveButton.isEnabled = true
+        }
     }
 
     @objc func dismissKeyboard() {
@@ -44,7 +52,11 @@ class AddActivityVC: UIViewController {
     }
 
     @IBAction func saveButtonTapped(_: Any) {
-        if let title = activityNameTextView.text, title.count > 0 {
+        if let activity = activity {
+            let date = activityDatePicker.date
+            ActivityStorageController.sharedStorage.update(activity: activity, date: date)
+            dismiss(animated: true, completion: nil)
+        } else if let title = activityNameTextView.text, title.count > 0 {
             let date = activityDatePicker.date
             ActivityStorageController.sharedStorage.insertActivity(activityTitle: title, date: date)
             dismiss(animated: true, completion: nil)

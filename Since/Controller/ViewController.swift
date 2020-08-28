@@ -29,6 +29,10 @@ class ViewController: UIViewController {
         nc.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -43,11 +47,6 @@ class ViewController: UIViewController {
         refresh()
     }
 
-    func reloadData() {
-        activityData = ActivityStorageController.sharedStorage.getAllActivities()
-        tableView.reloadData()
-    }
-
     func showDatePickerAlertController(activity: Activity) {
         let activityAlertController = UIAlertController(title: "Select action", message: nil, preferredStyle: .actionSheet)
 
@@ -56,7 +55,10 @@ class ViewController: UIViewController {
         }))
 
         activityAlertController.addAction(UIAlertAction(title: "Custom", style: .default, handler: { _ in
-            self.showDatePicker(forActivity: activity)
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddActivityVC") as? AddActivityVC {
+                vc.activity = activity
+                self.navigationController?.present(vc, animated: true, completion: nil)
+            }
         }))
 
         activityAlertController.addAction(UIAlertAction(title: "Details", style: .default, handler: { _ in
@@ -66,7 +68,9 @@ class ViewController: UIViewController {
             }
         }))
 
-        activityAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        activityAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+            self.refresh()
+        }))
 
         present(activityAlertController, animated: true, completion: nil)
     }
@@ -82,12 +86,6 @@ class ViewController: UIViewController {
 
     func updateDateOccuredForAction(date: Date, activity: Activity) {
         ActivityStorageController.sharedStorage.update(activity: activity, date: date)
-    }
-
-    func showDatePicker(forActivity: Activity) {
-        let datePickerVC = storyboard?.instantiateViewController(withIdentifier: "DatePickerVC") as! DatePickerViewController
-        datePickerVC.activity = forActivity
-        present(datePickerVC, animated: true, completion: nil)
     }
 
     @objc func refresh() {
