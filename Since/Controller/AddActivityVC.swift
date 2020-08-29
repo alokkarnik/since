@@ -34,7 +34,7 @@ class AddActivityVC: UIViewController {
         if activity == nil {
             activityNameTextView.delegate = self
             activityNameTextView.text = "Activity name"
-            activityNameTextView.textColor = .darkGray
+            activityNameTextView.textColor = UIColor.thatGreyColour()
             saveButton.isEnabled = false
         } else {
             activityNameTextView.text = activity?.title
@@ -97,7 +97,7 @@ extension AddActivityVC: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text == "" {
             textView.text = "Activity name"
-            textView.textColor = .lightGray
+            textView.textColor = UIColor.thatGreyColour()
             saveButton.isEnabled = false
         }
     }
