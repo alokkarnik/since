@@ -6,7 +6,7 @@ Sometimes calendar events seems like a wrong tool to track if X number of days h
 
 Tracking if X days have passed can be much simpler for spaced repetitionsinstead of countless calendar events, when the unit of measurements are number of days.
 
-<img src="/Screenshots/Since_home.png" alt="drawing" height="800" width="380"/>     <img src="/Screenshots/Since_detail.png" alt="drawing" height="800" width="380"/>
+<img src="/Screenshots/Since_home.png" alt="drawing" height="800" width="400"/>     <img src="/Screenshots/Since_detail.png" alt="drawing" height="800" width="400"/>
 
 # Prerequisite
 1. Xcode 11
